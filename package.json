@@ -1,0 +1,14 @@
+{
+  "name": "morse_cpu_read",
+  "version": "1.0.0",
+  "description": "Read morse code from CPU load",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "morse-node": "^0.1.1"
+  }
+}
