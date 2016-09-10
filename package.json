@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cpu-usage": "^0.1.0",
     "morse-node": "^0.1.1"
   }
 }

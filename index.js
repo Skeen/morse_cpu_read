@@ -6,13 +6,6 @@ var high = 0;
 var low = 0;
 var string = "";
 
-process.on('SIGINT', function() 
-{
-    console.log("Caught string:", string);
-    console.log("Decoded:", morse.decode(string));
-    process.exit();
-});
-
 libCpuUsage(100, function(load) 
 {
     if(load > 10)
