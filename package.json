@@ -4,11 +4,13 @@
   "description": "Read morse code from CPU load",
   "main": "index.js",
   "scripts": {
+    "build": "./node_modules/browserify/bin/cmd.js index.js -o output.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "browserify": "^13.1.0",
     "cpu-usage": "^0.1.0",
     "morse-node": "^0.1.1"
   }

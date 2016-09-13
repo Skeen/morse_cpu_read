@@ -1,5 +1,4 @@
 var morse = require('morse-node').create("ITU");
-var libCpuUsage = require( 'cpu-usage' );
 
 var string = "";
 var emit_letter = function()
@@ -8,20 +7,37 @@ var emit_letter = function()
     string = "";
 }
 
+POINT_SEPERATOR = -10;
+DOT = 5;
+DASH = 15;
+LETTER_SEPERATOR = -45;
+
+var close_to = function(reading, optimal)
+{
+    return optimal - 5 < reading && reading < optimal + 5;
+}
+
 var create_morse = function(signal)
 {
-    if(signal == -1)
+    if(close_to(signal, POINT_SEPERATOR))
     {
+        console.log("POINT SEPERATOR");
         return;
     }
     // Dot
-    if(signal == 1)
+    if(close_to(signal, DOT))
+    {
+        console.log("DOT");
         string += ".";
+    }
     // Line
-    else if(signal == 3)
+    else if(close_to(signal, DASH))
+    {
+        console.log("DASH");
         string += "-";
+    }
     // Letter seperator
-    else if(signal == -5)
+    else if(close_to(signal, LETTER_SEPERATOR))
     {
         emit_letter();
     }
@@ -32,25 +48,26 @@ var create_morse = function(signal)
     }
     else
     {
-        emit_letter();
+        //emit_letter();
         console.log("Unknown primitive:", signal);
     }
 }
 
 var handle_signal = function(signal)
 {
-    if(Math.abs(signal) > 5)
+    if(Math.abs(signal) > 2)
     {
-        var clean_sig = Math.round(signal/10);
+        var clean_sig = Math.round(signal);
         create_morse(clean_sig);
     }
 }
 
 var high = 0;
 var low = 0;
-libCpuUsage(100, function(load) 
+
+var morse_input = function(state)
 {
-    if(load > 10)
+    if(state)
     {
         // We switched from low to high
         if(low != 0)
@@ -82,4 +99,6 @@ libCpuUsage(100, function(load)
         emit_letter();
         high = 0;
     }
-});
+}
+
+window.morse_input = morse_input;
