@@ -1,16 +1,30 @@
 var morse = require('morse-node').create("ITU");
 
+var outputText = "";
+
 var string = "";
+
+var emit = function(text)
+{
+	outputText = outputText + text;
+	document.getElementById('morseOutput').innerHTML = outputText;
+}
 var emit_letter = function()
 {
     console.log(morse.decode(string));
+	emit(string);
     string = "";
+}
+var emit_space = function()
+{
+	console.log("_");
+	emit(" ");
 }
 
 POINT_SEPERATOR = -10;
-DOT = 5;
-DASH = 15;
-LETTER_SEPERATOR = -45;
+DOT = 10;
+DASH = 30;
+LETTER_SEPERATOR = -50;
 
 var close_to = function(reading, optimal)
 {
@@ -22,10 +36,9 @@ var create_morse = function(signal)
     if(close_to(signal, POINT_SEPERATOR))
     {
         console.log("POINT SEPERATOR");
-        return;
     }
     // Dot
-    if(close_to(signal, DOT))
+	else if(close_to(signal, DOT))
     {
         console.log("DOT");
         string += ".";
@@ -44,7 +57,7 @@ var create_morse = function(signal)
     else if(signal == -7)
     {
         emit_letter();
-        console.log("_");
+		emit_space();
     }
     else
     {
@@ -55,6 +68,7 @@ var create_morse = function(signal)
 
 var handle_signal = function(signal)
 {
+	console.log(signal);
     if(Math.abs(signal) > 2)
     {
         var clean_sig = Math.round(signal);

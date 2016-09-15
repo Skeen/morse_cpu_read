@@ -76,6 +76,8 @@ function set_difficultness()
 var pre_time;
 var post_time;
 
+var morse_high = false;
+
 var callback = function(data, run)
 {
     //console.log("run:", run, "done");
@@ -94,11 +96,13 @@ var callback = function(data, run)
     //console.log(sum - 100);
     if(sum - 100 > 50)
     {
-        morse_input(true);
+		morse_high = true
+        //morse_input(true);
     }
     else
     {
-        morse_input(false);
+		morse_high = false;
+        //morse_input(false);
     }
     //var avg = sum / times.length;
     //console.log("total:", sum, "average:", avg);
@@ -114,3 +118,4 @@ var handler = function()
 window.handler = handler;
 
 setTimeout(handler, 0);
+setInterval(function(){ morse_input(morse_high)}, 100);
