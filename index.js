@@ -11,8 +11,10 @@ var emit = function(text)
 }
 var emit_letter = function()
 {
-    console.log(morse.decode(string));
-	emit(string);
+	var decoded = morse.decode(string);
+	var decoded = decoded.trim();
+    console.log(decoded);
+	emit(decoded);
     string = "";
 }
 var emit_space = function()
@@ -25,6 +27,7 @@ POINT_SEPERATOR = -10;
 DOT = 10;
 DASH = 30;
 LETTER_SEPERATOR = -50;
+SPACE = -70;
 
 var close_to = function(reading, optimal)
 {
@@ -54,7 +57,7 @@ var create_morse = function(signal)
     {
         emit_letter();
     }
-    else if(signal == -7)
+    else if(close_to(signal, SPACE))
     {
         emit_letter();
 		emit_space();
