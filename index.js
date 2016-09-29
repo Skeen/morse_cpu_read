@@ -19,7 +19,7 @@ var emit_letter = function()
 }
 var emit_space = function()
 {
-	console.log("_");
+	console.log("SPACE");
 	emit(" ");
 }
 
@@ -34,30 +34,55 @@ var close_to = function(reading, optimal)
     return optimal - 5 < reading && reading < optimal + 5;
 }
 
+var primitives = [LETTER_SEPERATOR, POINT_SEPERATOR, DOT, DASH, SPACE];
+
+var closest_to = function(reading)
+{
+
+	var current_diff = 99;
+	var current_value = 99;
+
+	for(var i=0; i < primitives.length; i++)
+	{
+		var diff = Math.abs(reading - primitives[i]);
+		
+		if(diff < current_diff)
+		{
+			current_diff = diff;
+			current_value = primitives[i];
+		}
+	}
+
+	return current_value;
+}
+
 var create_morse = function(signal)
 {
-    if(close_to(signal, POINT_SEPERATOR))
+	var approx = closest_to(signal);
+
+    if(close_to(approx, POINT_SEPERATOR))
     {
         console.log("POINT SEPERATOR");
     }
     // Dot
-	else if(close_to(signal, DOT))
+	else if(close_to(approx, DOT))
     {
         console.log("DOT");
         string += ".";
     }
     // Line
-    else if(close_to(signal, DASH))
+    else if(close_to(approx, DASH))
     {
         console.log("DASH");
         string += "-";
     }
     // Letter seperator
-    else if(close_to(signal, LETTER_SEPERATOR))
+    else if(close_to(approx, LETTER_SEPERATOR))
     {
+		console.log("LETTER SEPERATOR");
         emit_letter();
     }
-    else if(close_to(signal, SPACE))
+    else if(close_to(approx, SPACE))
     {
         emit_letter();
 		emit_space();
@@ -79,28 +104,39 @@ var handle_signal = function(signal)
     }
 }
 
+// Decode signal as morse code
 var high = 0;
 var low = 0;
+var counter = 0;
+var tolerance = 3;
 
 var morse_input = function(state)
 {
+	if(state)
+		output(1);
+	else
+		output(0);
+	/*
     if(state)
     {
+		counter = Math.min(counter + 1, tolerance);
         // We switched from low to high
-        if(low != 0)
+        // Check if this is noise.
+		if(counter == tolerance && low >= tolerance)
         {
-            handle_signal(-low);
-            low = 0;
+			handle_signal(-low);
+			low = 0;
         }
         high++;
     }
     else
     {
+		counter = Math.max(counter -1, -tolerance);
         // We switched from high to low
-        if(high != 0)
+        if(counter == -tolerance && high >= tolerance)
         {
             handle_signal(high);
-            high = 0;
+			high = 0;
         }
         low++;
     }
@@ -116,6 +152,23 @@ var morse_input = function(state)
         emit_letter();
         high = 0;
     }
+	*/
+	
 }
 
+
+// Output the data to an array, for saving.
+var output_string = "Time, Value \n";
+var output_index = 0;
+var output = function(value)
+{
+	output_string = output_string + output_index + ", " + value + "\n";
+	output_index++;
+}
+
+window.output_string = function()
+{
+	return output_string;
+}
+window.output = output;
 window.morse_input = morse_input;

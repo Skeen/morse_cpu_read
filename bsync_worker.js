@@ -32,7 +32,7 @@ function getFibTime() {
     var start = performance.now();
     smooth_fib(initialize_data.fibval, initialize_data.fibfrac);
     var end = performance.now(); 
-    return { relStartTime : start - workerStartTime, fibTime : end - start } ;
+    return {id: initialize_data.id, relStartTime : start - workerStartTime, fibTime : end - start } ;
     // return [start, end-start];
 }
 
@@ -47,7 +47,7 @@ function getTimeSeries() {
         resFibTimes.push (r.fibTime);
     }
 
-    self.postMessage({payload: { startTimes: resStartTimes, fibTimes: resFibTimes }});
+    self.postMessage({payload: {id: initialize_data.id, startTimes: resStartTimes, fibTimes: resFibTimes }});
 }
 
 
@@ -57,6 +57,7 @@ onmessage = function(e)
     {
         if (e.data.fibval) 
         {
+		  //console.log(e.data.id);
           initialize_data = e.data;
         }
     }
